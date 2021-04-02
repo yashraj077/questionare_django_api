@@ -20,5 +20,6 @@ from . import views
 urlpatterns = [
     path('', views.home, name='home'),
     path('home_post', views.home_post, name='home_post'),
+    path('generalquestion', views.testurl, name='testurl'),
     path('api', views.QuestionList.as_view())
 ]

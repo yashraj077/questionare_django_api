@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -6,6 +6,8 @@ from .serializers import serializers, QuestionSerializer
 
 from .models import GeneralQuestion
 from django.contrib import messages
+
+import random
 
 
 # Create your views here.
@@ -34,8 +36,24 @@ def home_post(request):
     messages.success(request, "Question Added Successfully")
     return redirect("home")
 
+
 class QuestionList(APIView):
     def get(self, request):
         questions = GeneralQuestion.objects.all()
         serializer = QuestionSerializer(questions, many=True)
         return Response(serializer.data)
+
+
+def testurl(request):
+    total_rows = GeneralQuestion.objects.all().count()
+    random_id = random.randint(5, 4+total_rows)
+    query = GeneralQuestion.objects.get(id=random_id)
+    data = {
+        'question': query.question,
+        'option1': query.option1,
+        'option2': query.option2,
+        'option3': query.option3,
+        'option4': query.option4,
+        'ans': query.ans
+    }
+    return JsonResponse(data)
